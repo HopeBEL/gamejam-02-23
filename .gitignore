@@ -10,6 +10,10 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+#Not register plugins from vscode
+/[Aa]ssets/[Pp]lugins/
+/[Aa]ssets/[Pp]lugins.meta
+
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
@@ -26,6 +30,7 @@
 # Visual Studio cache directory
 .vs/
 .vscode/
+.vsconfig
 
 # Gradle cache directory
 .gradle/
