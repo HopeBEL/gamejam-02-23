@@ -6,7 +6,7 @@ using Mirror;
 public class MyNetworkManager : NetworkManager
 {
 
-    public void Awake() {
+    override public void Awake() {
         NetworkIdentity id = gameObject.GetComponent<NetworkIdentity>();
     }
     public override void OnStartServer()

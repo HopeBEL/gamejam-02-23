@@ -47,6 +47,8 @@ public class Typing : MonoBehaviour
 
     public TMP_Text targetWord;
     public TMP_Text inputWord;
+    public Player player;
+    public PlayerInput playerInput;
 
     public void TypingAction(InputAction.CallbackContext ctx)
     {
@@ -58,8 +60,10 @@ public class Typing : MonoBehaviour
             if (Input.GetKey((KeyCode)kcode))
             {
                 int last = text.Length - 1;
-                if (kcode == Letters.BackSpace && last > 0)
+                if (kcode == Letters.BackSpace)
                 {
+                    if (last < 0)
+                        break;
                     if (error)
                     {
                         text = text.Remove(text.IndexOf('<'));
@@ -71,10 +75,10 @@ public class Typing : MonoBehaviour
                 else if(!error)
                     text += kcode.ToString();
 
-                if (error)
-                    return;
-
                 last = text.Length - 1;
+                if (error || last < 0)
+                    break;
+
                 if (text[last] != word[last])
                 {
                     char c = text[last];
@@ -97,8 +101,13 @@ public class Typing : MonoBehaviour
     {
         yield return new WaitForSeconds(.5f);
         finish = false;
-        if(index<words.Length)
+        if (index < words.Length)
             word = words[index++];
+        else
+        {
+            player.enabled = true;
+            playerInput.enabled = false;
+        }
         targetWord.text = word;
         text = "";
         inputWord.text = text;
@@ -108,6 +117,10 @@ public class Typing : MonoBehaviour
     private void Start()
     {
         word = words[0];
+        GameObject exemple = GameObject.Find("Exemple").gameObject;
+        GameObject input = GameObject.Find("Input").gameObject;
+        targetWord = exemple.GetComponent<TextMeshProUGUI>();
+        inputWord = input.GetComponent<TextMeshProUGUI>();
         targetWord.text = word;
     }
 }
