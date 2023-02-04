@@ -5,6 +5,10 @@ using Mirror;
 
 public class MyNetworkManager : NetworkManager
 {
+
+    public void Awake() {
+        NetworkIdentity id = gameObject.GetComponent<NetworkIdentity>();
+    }
     public override void OnStartServer()
     {
         Debug.Log("Server started");
@@ -17,7 +21,9 @@ public class MyNetworkManager : NetworkManager
 
     public override void OnClientConnect()
     {
-        Debug.Log("Connected to server ");
+
+        Debug.Log("Connected to server " + NetworkClient.connection.connectionId);
+        
     }
 
     public override void OnClientDisconnect()
