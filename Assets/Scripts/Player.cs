@@ -40,6 +40,7 @@ public class Player : NetworkBehaviour
         //Donne le Sprite2D de Diana au joueur 1
         if (id.netId == 1)
         {
+            Destroy(gameObject.GetComponent<Light>());
             animator = gameObject.GetComponent<Animator>();
             gameObject.GetComponent<SpriteRenderer>().sprite = playerSprite1;
             playerRb = gameObject.GetComponent<Rigidbody2D>();
@@ -102,7 +103,7 @@ public class Player : NetworkBehaviour
         {
             //Le joueur 2 joue à la souris
             Vector3 move = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            move.z = 0;
+            move.z = -8;
             transform.position = move;
             // MA.OnMouseOver();
             // MA.OnMouseExit();

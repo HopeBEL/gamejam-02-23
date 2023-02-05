@@ -114,6 +114,14 @@ PrefabInstance:
       propertyPath: _assetId
       value: 2508578415
       objectReference: {fileID: 0}
+    - target: {fileID: 5644283580139613372, guid: 62494cf94b7383a4ebdf4887a862d98c, type: 3}
+      propertyPath: m_Range
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5644283580139613372, guid: 62494cf94b7383a4ebdf4887a862d98c, type: 3}
+      propertyPath: m_Intensity
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 6225969949263469792, guid: 62494cf94b7383a4ebdf4887a862d98c, type: 3}
       propertyPath: MA
       value: 
@@ -157,6 +165,10 @@ PrefabInstance:
     - target: {fileID: 8495532262204805776, guid: 62494cf94b7383a4ebdf4887a862d98c, type: 3}
       propertyPath: m_SortingLayer
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8495532262204805776, guid: 62494cf94b7383a4ebdf4887a862d98c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8495532262204805776, guid: 62494cf94b7383a4ebdf4887a862d98c, type: 3}
       propertyPath: m_SortingLayerID

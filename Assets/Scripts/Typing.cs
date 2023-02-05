@@ -39,6 +39,7 @@ public class Typing : NetworkBehaviour
         Z = KeyCode.Z,
         BackSpace = KeyCode.Backspace
     }
+    private GameObject dirLight;
     NetworkIdentity id;
     public string[] words = new string[10];
     // [SyncVar(hook = "DisplayTargetWord")]
@@ -115,6 +116,7 @@ public class Typing : NetworkBehaviour
             player.enabled = true;
             playerInput.enabled = false;
             CallRpcHide();
+            CallRpcLight();
         }
         //targetWord.text = word;
         CallRpcTargetWord(word);
@@ -149,14 +151,16 @@ public class Typing : NetworkBehaviour
 
     private void Awake() {
 
+        dirLight = GameObject.Find("LightEmpty").gameObject;
+        dirLight.gameObject.GetComponent<Light>().enabled = false;
         id = GetComponent<NetworkIdentity>();
         
-            word = words[0];
-            exemple = GameObject.Find("Exemple").gameObject;
-            input = GameObject.Find("Input").gameObject;
-            targetWord = exemple.GetComponent<TextMeshProUGUI>();
-            inputWord = input.GetComponent<TextMeshProUGUI>();
-            targetWord.text = word;
+        word = words[0];
+        exemple = GameObject.Find("Exemple").gameObject;
+        input = GameObject.Find("Input").gameObject;
+        targetWord = exemple.GetComponent<TextMeshProUGUI>();
+        inputWord = input.GetComponent<TextMeshProUGUI>();
+        targetWord.text = word;
 
             // exemple.transform.parent.gameObject.SetActive(false);
             // input.transform.parent.gameObject.SetActive(false);
@@ -165,6 +169,7 @@ public class Typing : NetworkBehaviour
 
     private void Start()
     {
+        
         // word = words[0];
         // GameObject exemple = GameObject.Find("Exemple").gameObject;
         // GameObject input = GameObject.Find("Input").gameObject;
@@ -190,6 +195,11 @@ public class Typing : NetworkBehaviour
         RpcHide();
     }
 
+    [Command]
+    public void CallRpcLight() {
+        RpcLight();
+    }
+
     [ClientRpc]
     public void RpcDisplay() {
         exemple.transform.parent.gameObject.GetComponent<Image>().enabled = true;
@@ -202,5 +212,10 @@ public class Typing : NetworkBehaviour
         exemple.transform.parent.gameObject.GetComponent<Image>().enabled = false;
         exemple.transform.gameObject.GetComponent<TMPro.TextMeshProUGUI>().enabled = false;
         input.transform.parent.gameObject.GetComponent<Image>().enabled = false;
+    }
+
+    [ClientRpc]
+    public void RpcLight() {
+        dirLight.gameObject.GetComponent<Light>().enabled = true;
     }
 }
