@@ -23,6 +23,8 @@ public class Player : NetworkBehaviour
     [SerializeField] private LayerMask groundLayer;
     Vector3 move;
     public GameObject triggerCanva;
+
+    private Animator animator;
     private void Awake()
     {
         playerControls = new PlayerInputAction();
@@ -38,6 +40,7 @@ public class Player : NetworkBehaviour
         //Donne le Sprite2D de Diana au joueur 1
         if (id.netId == 1)
         {
+            animator = gameObject.GetComponent<Animator>();
             gameObject.GetComponent<SpriteRenderer>().sprite = playerSprite1;
             playerRb = gameObject.GetComponent<Rigidbody2D>();
         }
@@ -45,7 +48,9 @@ public class Player : NetworkBehaviour
         else if (id.netId >= 2)
         {
             Destroy(gameObject.GetComponent<Rigidbody2D>());
+            Destroy(gameObject.GetComponent<Animator>());
             gameObject.GetComponent<SpriteRenderer>().sprite = playerSprite2;
+            Cursor.visible = false;
         }
     }
 
@@ -78,7 +83,12 @@ public class Player : NetworkBehaviour
         //Joueur 1
         if (isLocalPlayer && id.netId == 1)
         {
+            animator.SetBool("isWalking", true);
             move = playerControls.Player.Move.ReadValue<Vector2>();
+
+            if (move.x == 0) {
+                animator.SetBool("isWalking", false);
+            }
             //move = new Vector3(move.x * 0.1f, move.y * 0.1f, 0);
            //Debug.Log("Move : " + move);
             playerRb.velocity =new Vector2(move.x * speed, playerRb.velocity.y);
@@ -103,7 +113,7 @@ public class Player : NetworkBehaviour
     }
 
     public void FlipPlayer() {
-        if (!isFacingRight && move.x < 0 || isFacingRight && move.x > 0) {
+        if (isFacingRight && move.x < 0 || !isFacingRight && move.x > 0) {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
             localScale.x *= -1f;
