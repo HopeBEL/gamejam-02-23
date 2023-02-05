@@ -11,7 +11,7 @@ public class Player : NetworkBehaviour
     public Sprite playerSprite1;
     public Sprite playerSprite2;
     private PlayerInput playerInput;
-
+    // public MouseAnim MA;
     NetworkIdentity id;
     public float jumpForce = 10f;
     public float speed = 5f;
@@ -104,6 +104,8 @@ public class Player : NetworkBehaviour
             Vector3 move = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             move.z = 0;
             transform.position = move;
+            // MA.OnMouseOver();
+            // MA.OnMouseExit();
             //Debug.Log(transform.position);
         }
     }

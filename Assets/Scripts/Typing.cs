@@ -114,11 +114,13 @@ public class Typing : NetworkBehaviour
         {
             player.enabled = true;
             playerInput.enabled = false;
+            CallRpcHide();
         }
         //targetWord.text = word;
         CallRpcTargetWord(word);
         text = "";
-        inputWord.text = text;
+        //inputWord.text = text;
+        CallRpcInput(text);
     }
     
     //Le client envoie l'input au serveur
@@ -175,6 +177,7 @@ public class Typing : NetworkBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         Debug.Log("Laaaaaaaaaaaaaaaa");
         CallRpcDisplay();
+        player.CallRpcImmobile();
     } 
     
     [Command]
