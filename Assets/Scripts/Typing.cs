@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mirror;
 
-public class Typing : MonoBehaviour
+public class Typing : NetworkBehaviour
 {
     private enum Letters
     {
@@ -39,17 +40,20 @@ public class Typing : MonoBehaviour
     }
 
     public string[] words = new string[10];
-    private string word;
+    // [SyncVar(hook = "DisplayTargetWord")]
+    private string word = "";
     private int index = 1;
+    //[SyncVar(hook = "DisplayInputText")]
     private string text = "";
     private bool error = false;
     private bool finish = false;
 
+    GameObject input;
+    GameObject exemple;
     public TMP_Text targetWord;
     public TMP_Text inputWord;
     public Player player;
     public PlayerInput playerInput;
-
     public void TypingAction(InputAction.CallbackContext ctx)
     {
         if (ctx.performed || ctx.canceled || finish)
@@ -95,7 +99,9 @@ public class Typing : MonoBehaviour
                 }
             }
         }
-        inputWord.text = text;
+        // DisplayInputText(inputWord.text, text);
+        //inputWord.text = text;
+        CallRpcInput(text);
     }
     IEnumerator Next()
     {
@@ -108,10 +114,42 @@ public class Typing : MonoBehaviour
             player.enabled = true;
             playerInput.enabled = false;
         }
-        targetWord.text = word;
+        //targetWord.text = word;
+        CallRpcTargetWord(word);
         text = "";
         inputWord.text = text;
+    }
+    
+    //Le client envoie l'input au serveur
+    [Command]
+    public void CallRpcInput(String input) {
+        RpcChangeInput(input);
+    }
 
+    //Le client envoie le nouveau mot au serveur
+    [Command]
+    public void CallRpcTargetWord(String word) {
+        RpcChangeTargetWord(word);
+    }
+
+    //Le serveur dit à tous les clients de changer l'input
+    [ClientRpc]
+    public void RpcChangeInput(String input) {
+        inputWord.text = input;
+    }
+
+    //Le serveur dit à tous les clients de changer le mot
+    [ClientRpc]
+    public void RpcChangeTargetWord(String word) {
+        targetWord.text = word;
+    }
+
+    private void Awake() {
+        // exemple = GameObject.Find("Exemple").gameObject;
+        // input = GameObject.Find("Input").gameObject;
+        // targetWord = exemple.GetComponent<TextMeshProUGUI>();
+        // inputWord = input.GetComponent<TextMeshProUGUI>();
+        // targetWord.text = word;
     }
 
     private void Start()
@@ -122,5 +160,19 @@ public class Typing : MonoBehaviour
         targetWord = exemple.GetComponent<TextMeshProUGUI>();
         inputWord = input.GetComponent<TextMeshProUGUI>();
         targetWord.text = word;
+
+        exemple.transform.parent.gameObject.SetActive(false);
+        input.transform.parent.gameObject.SetActive(false);
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        Debug.Log("Laaaaaaaaaaaaaaaa");
+        exemple.transform.parent.gameObject.SetActive(true);
+        input.transform.parent.gameObject.SetActive(true);
+
+    } 
+    
+    private void OnCollisionEnter(Collision other) {
+        Debug.Log("Looooooooooooooooooo");
     }
 }
