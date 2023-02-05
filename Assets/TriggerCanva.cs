@@ -5,15 +5,16 @@ using UnityEngine;
 public class TriggerCanva : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject exemple;
+    /*public GameObject exemple;
     public GameObject input;
+
+    public Typing typing;
     void Start()
     {
-        exemple = GameObject.Find("Exemple").gameObject;
+        /*exemple = GameObject.Find("Exemple").gameObject;
         input = GameObject.Find("Input").gameObject;
 
-        exemple.transform.parent.gameObject.SetActive(false);
-        input.transform.parent.gameObject.SetActive(false);
+     
     }
 
     // Update is called once per frame
@@ -22,11 +23,11 @@ public class TriggerCanva : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter2D(Collider2D other) {
         Debug.Log("Je suis rentré");
 
         //if (other.gameObject.CompareTag("Player"))
-        exemple.transform.parent.gameObject.SetActive(true);
-        input.transform.parent.gameObject.SetActive(true);
-    }
+        typing.exemple.transform.parent.gameObject.SetActive(true);
+        typing.input.transform.parent.gameObject.SetActive(true);
+    }*/
 }

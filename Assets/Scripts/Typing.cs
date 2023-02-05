@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
+using UnityEngine.UI;
 
 public class Typing : NetworkBehaviour
 {
@@ -38,7 +39,7 @@ public class Typing : NetworkBehaviour
         Z = KeyCode.Z,
         BackSpace = KeyCode.Backspace
     }
-
+    NetworkIdentity id;
     public string[] words = new string[10];
     // [SyncVar(hook = "DisplayTargetWord")]
     private string word = "";
@@ -145,34 +146,58 @@ public class Typing : NetworkBehaviour
     }
 
     private void Awake() {
-        // exemple = GameObject.Find("Exemple").gameObject;
-        // input = GameObject.Find("Input").gameObject;
-        // targetWord = exemple.GetComponent<TextMeshProUGUI>();
-        // inputWord = input.GetComponent<TextMeshProUGUI>();
-        // targetWord.text = word;
+
+        id = GetComponent<NetworkIdentity>();
+        
+            word = words[0];
+            exemple = GameObject.Find("Exemple").gameObject;
+            input = GameObject.Find("Input").gameObject;
+            targetWord = exemple.GetComponent<TextMeshProUGUI>();
+            inputWord = input.GetComponent<TextMeshProUGUI>();
+            targetWord.text = word;
+
+            // exemple.transform.parent.gameObject.SetActive(false);
+            // input.transform.parent.gameObject.SetActive(false);
+        
     }
 
     private void Start()
     {
-        word = words[0];
-        GameObject exemple = GameObject.Find("Exemple").gameObject;
-        GameObject input = GameObject.Find("Input").gameObject;
-        targetWord = exemple.GetComponent<TextMeshProUGUI>();
-        inputWord = input.GetComponent<TextMeshProUGUI>();
-        targetWord.text = word;
-
-        exemple.transform.parent.gameObject.SetActive(false);
-        input.transform.parent.gameObject.SetActive(false);
+        // word = words[0];
+        // GameObject exemple = GameObject.Find("Exemple").gameObject;
+        // GameObject input = GameObject.Find("Input").gameObject;
+        // targetWord = exemple.GetComponent<TextMeshProUGUI>();
+        // inputWord = input.GetComponent<TextMeshProUGUI>();
+        // targetWord.text = word;
+        CallRpcHide();
     }
 
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter2D(Collider2D other) {
         Debug.Log("Laaaaaaaaaaaaaaaa");
-        exemple.transform.parent.gameObject.SetActive(true);
-        input.transform.parent.gameObject.SetActive(true);
-
+        CallRpcDisplay();
     } 
     
-    private void OnCollisionEnter(Collision other) {
-        Debug.Log("Looooooooooooooooooo");
+    [Command]
+    public void CallRpcDisplay() {
+        RpcDisplay();
+    }
+
+    [Command]
+    public void CallRpcHide() {
+        RpcHide();
+    }
+
+    [ClientRpc]
+    public void RpcDisplay() {
+        exemple.transform.parent.gameObject.GetComponent<Image>().enabled = true;
+        exemple.transform.gameObject.GetComponent<TMPro.TextMeshProUGUI>().enabled = true;
+        input.transform.parent.gameObject.GetComponent<Image>().enabled = true;
+    }
+
+    [ClientRpc]
+    public void RpcHide() {
+        exemple.transform.parent.gameObject.GetComponent<Image>().enabled = false;
+        exemple.transform.gameObject.GetComponent<TMPro.TextMeshProUGUI>().enabled = false;
+        input.transform.parent.gameObject.GetComponent<Image>().enabled = false;
     }
 }
